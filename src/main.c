@@ -1,12 +1,4 @@
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-void ignore_spaces(char** ptr_) {
-  while (isspace(**ptr_) || **ptr_ == '\r' || **ptr_ == '\n' || **ptr_ == '\t')
-    ++(*ptr_);
-}
+#include "skip.h"
 
 int parse_num(char** ptr_) {
   if (!isdigit(**ptr_)) {
