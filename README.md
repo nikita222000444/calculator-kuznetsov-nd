@@ -39,7 +39,7 @@ The program will prompt you to enter an arithmetic expression. After entering th
 - All intermediate results (for any allowed order of evaluation) are fit into range $[-2 \times 10^9 \dots + 2\times 10^9]$ (else `UB`)
 - Supports flag `--float` that switch app calculations into *real* numbers mode
 - In integer mode:
-  - `/` return an integer part of an division (rounds towards `-0`)
+  - `/` return an integer part of an division (rounds towards `0`)
   - Answer must be given on a single line as an integer number (with `-` sign if negative)
 - In *real* numbers mode:
   - `/` return a fraction number
