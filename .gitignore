@@ -1,4 +1,6 @@
 *.exe
 *.out
 *.elf
-temp.c
+*.txt
+googletest/
+build/
