@@ -2,6 +2,7 @@
 *.out
 *.elf
 *.txt
+__pycache__/
 googletest/
 build/
 venv/
