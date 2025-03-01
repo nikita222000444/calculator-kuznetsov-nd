@@ -162,8 +162,8 @@ float calc_expression_float(char** ptr_) {
   return term;
 }
 #ifndef GTEST
-int main(int argc, char* argv[]) {
-  printf("Enter the expression\n");
+int main(int argc, char* argv[]) 
+{
   char* expression = malloc(sizeof(char) * 1025);
   if (fgets(expression, sizeof(char) * 1025, stdin) == NULL) {
     printf("Expression is not expression\n");

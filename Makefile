@@ -7,6 +7,15 @@ AR  ?= ar
 GTEST_DIR = googletest/googletest
 GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h $(GTEST_DIR)/include/gtest/internal/*.h
 
+#Python
+PYTHON := python3
+PIP := pip3
+VENV_NAME := venv
+VENV_ACTIVATE := $(VENV_NAME)/bin/activate
+VENV_PYTHON := $(VENV_NAME)/bin/python
+VENV_PIP := $(VENV_NAME)/bin/pip
+PYTEST := $(VENV_NAME)/bin/pytest
+
 APP_BUILD_DIR=build/app
 TEST_BUILD_DIR=build/test
 
@@ -45,6 +54,7 @@ all: $(BUILD_DIR)/app.exe $(BUILD_DIR)/unit-tests.exe
 
 clean:
 	rm -rf $(BUILD_DIR)
+	rm -rf $(VENV_NAME)
 
 # Run the normal C application
 run-int: $(BUILD_DIR)/app.exe
@@ -91,6 +101,24 @@ $(TEST_BUILD_DIR_UNIT_TESTS_OBJS)/%.o: $(TESTS_DIR)/%.cpp
 # Link test executable with the TEST version of the C application and gtest
 $(BUILD_DIR)/unit-tests.exe: $(TEST_OBJS) $(UNIT_TESTS_OBJS) $(TEST_BUILD_DIR)/gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+	
+###########
+# PYTESTS #
+###########
+
+# Create virtual environment if it doesn't exist
+venv: 
+	@$(PYTHON) -m venv $(VENV_NAME) || (echo "python3-venv not found. Installing..." && sudo apt update && sudo apt install python3.8-venv)
+
+run-integration-tests: build/app.exe install-deps
+	source $(VENV_NAME)/bin/activate; $(PYTEST) tests/integration/inttest.py
+	
+
+# Install dependencies in virtual environment
+install-deps: venv
+	@echo "Installing dependencies..."
+	@. $(VENV_ACTIVATE) && $(VENV_PIP) install --upgrade pip
+	@. $(VENV_ACTIVATE) && $(VENV_PIP) install pytest
 
 ####################################
 # BUILD GOOGLE TEST STATIC LIBRARY #
