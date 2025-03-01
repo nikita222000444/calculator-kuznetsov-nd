@@ -2,7 +2,6 @@
 *.out
 *.elf
 *.txt
-*cache
 googletest/
 build/
 venv/
