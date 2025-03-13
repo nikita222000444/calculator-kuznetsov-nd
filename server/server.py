@@ -86,3 +86,17 @@ class CalculatorHandler(BaseHTTPRequestHandler):
 
         # Возвращаем результат
         return stdout.strip()
+
+# Запуск сервера
+def run(server_class=HTTPServer, handler_class=CalculatorHandler, port=8000):
+    server_address = ('', port)
+    httpd = server_class(server_address, handler_class)
+    print(f"Starting httpd server on port {port}")
+    try:
+
+httpd.serve_forever()
+    except KeyboardInterrupt:
+        httpd.server_close()
+
+if name == "__main__":
+    run()
