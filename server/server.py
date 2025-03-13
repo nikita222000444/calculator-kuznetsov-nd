@@ -3,18 +3,41 @@ import json
 import urllib.parse
 import subprocess
 import structlog
+import sys
 
 # Настройка structlog
-structlog.configure(
-    processors=[
-        structlog.processors.JSONRenderer(indent=2, sort_keys=True),  # Красивое форматирование JSON
-    ],
-    context_class=dict,
-    logger_factory=structlog.PrintLoggerFactory(),  # Вывод логов в консоль
-)
+def configure_logging():
+
+    # Логгер для записи в файл
+    file_logger = structlog.PrintLogger(file=open("server/logs.log", "a"))
+
+    # Функция для записи логов в файл с отступами
+    def file_logger_with_indent(logger, method_name, event_dict):
+        # Форматируем JSON с отступами
+        formatted_log = json.dumps(event_dict, indent=2)
+        # Записываем в файл
+        file_logger.msg(formatted_log)
+        return event_dict
+
+    # Настройка structlog
+    structlog.configure(
+        processors=[
+            structlog.processors.add_log_level,
+            structlog.processors.TimeStamper(fmt="iso"),
+            file_logger_with_indent,  # Записываем в файл с отступами
+            structlog.processors.JSONRenderer(indent=2, sort_keys=True),  # Для консоли
+        ],
+        context_class=dict,
+        logger_factory=structlog.PrintLoggerFactory(),  # Используем PrintLogger
+        wrapper_class=structlog.BoundLogger,
+        cache_logger_on_first_use=True,
+    )
+
+    # Возвращаем логгер
+    return structlog.get_logger()
 
 # Создаем логгер
-logger = structlog.get_logger()
+logger = configure_logging()
 
 # Класс обработчика запросов
 class CalculatorHandler(BaseHTTPRequestHandler):
@@ -79,8 +102,7 @@ class CalculatorHandler(BaseHTTPRequestHandler):
                     logger.error("app.exe not found")
                     self.send_response(500)
                     self.send_header('Content-type', 'application/json')
-                    self.end_headers()
-                    self.wfile.write(json.dumps({"error": "app.exe not found"}).encode('utf-8'))
+                    self.end_headers()self.wfile.write(json.dumps({"error": "app.exe not found"}).encode('utf-8'))
                 except Exception as e:
                     logger.error("Unexpected error", error=str(e))
                     self.send_response(500)
@@ -93,7 +115,8 @@ class CalculatorHandler(BaseHTTPRequestHandler):
                 self.send_header('Content-type', 'application/json')
                 self.end_headers()
                 self.wfile.write(json.dumps({"error": "Internal server error"}).encode('utf-8'))
-        else:logger.warning("Path not found", path=self.path)
+        else:
+            logger.warning("Path not found", path=self.path)
             self.send_response(404)
             self.send_header('Content-type', 'application/json')
             self.end_headers()
