@@ -68,6 +68,9 @@ run-float: $(BUILD_DIR)/app.exe
 run-unit-tests: $(BUILD_DIR)/unit-tests.exe
 	@$<
 
+run-server: $(BUILD_DIR)/app.exe
+	$(PYTHON) server/server.py
+
 #############
 # BUILD APP #
 #############
