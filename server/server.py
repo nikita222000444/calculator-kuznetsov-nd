@@ -63,3 +63,26 @@ class CalculatorHandler(BaseHTTPRequestHandler):
 
     # Метод для вычисления выражения с помощью app.exe
     def evaluate_with_app_exe(self, expression, use_float):
+        # Подготавливаем входные данные для app.exe
+        input_data = f"{expression}\n{'float' if use_float else 'int'}\n"
+        
+        args = ['build/app.exe']
+        if use_float:
+            args.append('--float')
+            
+        # Вызываем app.exe
+        process = subprocess.Popen(
+            args,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        stdout, stderr = process.communicate(input=input_data)
+
+        # Проверяем код завершения
+        if process.returncode != 0:
+            raise subprocess.CalledProcessError(process.returncode, 'app.exe', stderr)
+
+        # Возвращаем результат
+        return stdout.strip()
