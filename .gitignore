@@ -2,6 +2,7 @@
 *.out
 *.elf
 *.txt
+*.log
 __pycache__/
 googletest/
 build/
