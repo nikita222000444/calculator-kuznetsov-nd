@@ -98,11 +98,6 @@ class CalculatorHandler(BaseHTTPRequestHandler):
                     self.send_header('Content-type', 'application/json')
                     self.end_headers()
                     self.wfile.write(json.dumps({"error": f"app.exe failed: {e.output.decode()}"}).encode('utf-8'))
-                except FileNotFoundError:
-                    logger.error("app.exe not found")
-                    self.send_response(500)
-                    self.send_header('Content-type', 'application/json')
-                    self.end_headers()self.wfile.write(json.dumps({"error": "app.exe not found"}).encode('utf-8'))
                 except Exception as e:
                     logger.error("Unexpected error", error=str(e))
                     self.send_response(500)
