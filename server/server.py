@@ -155,5 +155,5 @@ def run(server_class=HTTPServer, handler_class=CalculatorHandler, port=8000):
         logger.info("Stopping server")
         httpd.server_close()
 
-if name == "__main__":
+if __name__ == "__main__":
     run()
