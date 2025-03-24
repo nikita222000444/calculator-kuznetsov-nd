@@ -69,8 +69,11 @@ run-unit-tests: $(BUILD_DIR)/unit-tests.exe
 	@$<
 
 run-server: $(BUILD_DIR)/app.exe
-	$(PYTHON) server/server.py
+	$(PYTHON) server/server.py || pip install structlog
 
+run-gui: 
+	$(PYTHON) gui/gui.py || pip install pyside6
+	
 #############
 # BUILD APP #
 #############
