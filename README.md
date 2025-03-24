@@ -6,23 +6,29 @@ A program written in C. It reads an arithmetic expression from standard input, p
 ### Building the Program
 To build the program, you need a C compiler such as `gcc` or `clang`. Follow these steps:
 1. Open a terminal.
-2. Navigate to the directory containing the source code(`main.c`).
+2. Navigate to the main directory containing the Makefile(`Makefile`).
 3. Run the following command to compile the program.
 ```
-gcc main.c -o calculator.exe
+make all
 ```
 This will create an executable file named calculator.exe.
 
 ### Running the Program
 To run the program in integer mode, use the following command:
 ```
-./calculator.exe
+make run-int
 ```
 Use following command to run program in *real* numbers mode
 ```
-./calculator.exe --float
+make run-float
 ```
 The program will prompt you to enter an arithmetic expression. After entering the expression, press `Enter` to see the result.
+
+### Running the Server
+To run the server in integer mode, use the following command:
+```
+make run-server
+```
 
 ### Important remarks
 - Input passed through `stdin`
@@ -45,3 +51,24 @@ The program will prompt you to enter an arithmetic expression. After entering th
   - `/` return a fraction number
   - Answer must be given on a single line as a real number (decimal notation) with an absolute accuracy $\pm 10^{-4}$
 In any mode division on a number less than $10^{-4}$ are forbidden (else `UB`)
+
+## Schedule
+**08.03.2025:** Поиск партнёра
+
+**09.03.2025:** Подключение к трекеру
+
+**10.03.2025:** Открытие задач на создание сервера
+
+**11.03.2025:** Курсач
+
+**12.03.2025:** Исполнение задач
+
+**13.03.2025:**
+- Открытие задач на реализацию логирования
+- Исполнение, коммиты и закрытие задач
+
+**14.03.2025:** Тестирование
+
+**15.03.2025:** Тестирование
+
+**16.03.2025:** Исправление багов
