@@ -32,7 +32,24 @@ class CalculatorGUI(QWidget):
 
         self.setLayout(layout)
         
+    def send_request(self):
+        expression = self.expression_input.text()
+        use_float = self.float_checkbox.isChecked()
 
+        url = "http://localhost:8000/calc"
+        
+
+        try:
+            # Отправляем POST-запрос на сервер
+            response = requests.post(
+                url,
+                headers={"Content-Type": "application/json"},
+                data=json.dumps(expression)
+            )
+
+        except requests.exceptions.RequestException as e:
+            # Обрабатываем ошибки подключения
+            self.result_label.setText(f"Ошибка подключения: {str(e)}")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
