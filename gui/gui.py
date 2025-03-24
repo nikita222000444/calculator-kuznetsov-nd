@@ -24,9 +24,10 @@ class CalculatorGUI(QWidget):
             self.expression_input
         )
         self.expression_input.setValidator(validator)
-        
+
         self.result_label = QLabel("Результат: ", self)
         
+        self.float_checkbox = QCheckBox("Использовать числа с плавающей точкой (--float)", self)
 
         self.submit_button = QPushButton("Отправить", self)
         self.submit_button.clicked.connect(self.send_request)
@@ -34,17 +35,20 @@ class CalculatorGUI(QWidget):
         # Компоновка виджетов
         layout = QVBoxLayout()
         layout.addWidget(self.expression_input)
+        layout.addWidget(self.float_checkbox)
         layout.addWidget(self.submit_button)
         layout.addWidget(self.result_label)
 
         self.setLayout(layout)
-        
+
     def send_request(self):
         expression = self.expression_input.text()
         use_float = self.float_checkbox.isChecked()
 
+        # Формируем URL с параметром float
         url = "http://localhost:8000/calc"
-        
+        if use_float:
+            url += "?float=true"
 
         try:
             # Отправляем POST-запрос на сервер
@@ -53,7 +57,7 @@ class CalculatorGUI(QWidget):
                 headers={"Content-Type": "application/json"},
                 data=json.dumps(expression)
             )
-            
+
             # Проверяем статус ответа
             if response.status_code == 200:
                 # Отображаем результат
@@ -65,6 +69,7 @@ class CalculatorGUI(QWidget):
         except requests.exceptions.RequestException as e:
             # Обрабатываем ошибки подключения
             self.result_label.setText(f"Ошибка подключения: {str(e)}")
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
