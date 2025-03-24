@@ -17,7 +17,14 @@ class CalculatorGUI(QWidget):
         # Создание виджетов
         self.expression_input = QLineEdit(self)
         self.expression_input.setPlaceholderText("Введите выражение (например, 10 / 3)")
-
+        
+        # Валидатор: разрешаем только цифры, операторы и пробелы
+        validator = QRegularExpressionValidator(
+            QRegularExpression(r'^[0-9+\-*/\s]+$'),  # Регулярное выражение
+            self.expression_input
+        )
+        self.expression_input.setValidator(validator)
+        
         self.result_label = QLabel("Результат: ", self)
         
 
@@ -46,6 +53,14 @@ class CalculatorGUI(QWidget):
                 headers={"Content-Type": "application/json"},
                 data=json.dumps(expression)
             )
+            
+            # Проверяем статус ответа
+            if response.status_code == 200:
+                # Отображаем результат
+                self.result_label.setText(f"Результат: {response.text}")
+            else:
+                # Отображаем ошибку
+                self.result_label.setText(f"Ошибка: {response.text}")
 
         except requests.exceptions.RequestException as e:
             # Обрабатываем ошибки подключения
